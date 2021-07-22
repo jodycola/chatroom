@@ -8,7 +8,6 @@ export default function Input({ message, setMessage, handleSendMessage }) {
     <form className="form">
         <textarea
             className="input"
-            type="text"
             placeholder="Type a message"
             value={message}
             onChange={(e) => setMessage(e.target.value)}

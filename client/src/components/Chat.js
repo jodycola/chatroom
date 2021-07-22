@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import Input from './Input'
+import Input from './Input';
+import Message from './Message';
 import useMessage from '../useMessage/useMessage';
 import styled from 'styled-components';
 
@@ -11,7 +12,7 @@ export default function Chat(props) {
     const { messages, sendMessage } = useMessage(room);
 
     const handleSendMessage = (e) => {
-        e.preventDefault()
+        e.preventDefault();
         sendMessage(message);
         setMessage('');
     };
@@ -19,19 +20,8 @@ export default function Chat(props) {
     return (
         <ChatStyled>
         <div className="container">
-            <h1 className="room-title"> {room} </h1>
-            <div className="messages-container">
-                <ol className="messages-list">
-                    {messages.map((message, i) => (
-                        <li
-                            key={i}
-                            className={`message-item ${message.currentUser ? "my-message" : "received-message"}`}
-                        >
-                            {message.body}
-                        </li>
-                    ))}
-                </ol>
-            </div>
+            <h1 className="room-title"> Room Name: {room} </h1>
+            {messages.length === 0 ? null : <div className="messages"> <Message message={message} messages={messages}/> </div>}
             <Input message={message} setMessage={setMessage} handleSendMessage={handleSendMessage} />
         </div>
         </ChatStyled>
@@ -49,21 +39,20 @@ const ChatStyled = styled.div`
     background-color: #1A1A1D;
 }
 
-.message-item {
-    color: white;
-    font-size: 36px;
+h1 {
+    position: absolute;
+    top: 0;
+    left: 50px;
+    font-size: 50px;
+    color: #FFF;
+    border-bottom: 2px #FFF solid;
 }
 
-.message-list {
-    position: fixed;
-    bottom: 0;
+.messages {
+  padding: 5% 0;
+  overflow: auto;
+  flex: auto;
 }
-
-li {
-    padding: 0;
-    list-style-type: none;
-}
-
 
 @media (min-width: 320px) and (max-width: 480px) {
   .container {

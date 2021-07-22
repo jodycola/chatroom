@@ -10,7 +10,7 @@ export default function Join() {
         <JoinStyled>
         <div className="outer">
             <div className="inner">
-                <h1 className="heading"> Let's Chat </h1>
+                <h1> Let's Chat </h1>
 
                 <input 
                     placeholder="Name" 
