@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 export default function Message({ message, messages }) {
+    const name = (new URLSearchParams(window.location.search)).get('name');
+
     return (
         <MessageStyle>
         <div className="container">
@@ -11,6 +13,15 @@ export default function Message({ message, messages }) {
                         {message.body}
                     </div>
                 ))}
+                {name ? 
+                <div className="user">
+                    {name}
+                </div>
+                :
+                <div className="user">
+                    user
+                </div>
+                }
             </div>
         </div>
         </MessageStyle>
@@ -27,16 +38,16 @@ const MessageStyle = styled.div`
 }
 
 .box {
-    background: #F3F3F3;
+    position: relative;
+    right: 50px;
     border-radius: 20px;
     padding: 5px 20px;
-    color: white;
     display: inline-block;
     max-width: 80%;
 }
 
 .text {
-    color: black;
+    color: white;
     width: 100%;
     letter-spacing: 0;
     float: left;
@@ -44,11 +55,34 @@ const MessageStyle = styled.div`
     word-wrap: break-word;
 }
 
-.sent-text {
-    display: flex;
-    align-items: center;
+.user {
+    position: relative;
+    top: 10px;
+    left: 150px;
     font-family: Helvetica;
-    color: #828282;
+    color: #FFF;
     letter-spacing: 0.3px;
+}
+
+.my-message {
+    margin-left: 50px;
+	background-image: linear-gradient(#99c2ff, #0066ff);
+    position: relative;
+	display: inline-block;
+	padding: 10px 20px;
+	color: #fff;
+	font-size: 25px;
+    border-radius: 10px;
+}
+
+.received-message {
+    right: 250px;
+	background-image: linear-gradient(#ff8080, #ff0000);
+    position: relative;
+	display: inline-block;
+	padding: 10px 20px;
+	color: #fff;
+	font-size: 25px;
+    border-radius: 10px;
 }
 `

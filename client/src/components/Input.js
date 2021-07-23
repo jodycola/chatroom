@@ -6,7 +6,7 @@ export default function Input({ message, setMessage, handleSendMessage }) {
     return (
     <InputStyled>
     <form className="form">
-        <textarea
+        <input
             className="input"
             placeholder="Type a message"
             value={message}
@@ -23,13 +23,14 @@ const InputStyled = styled.div`
 .form {
     display: flex;
     position: fixed;
+    padding: 10px;
     bottom: 0;
     height: 50px;
     width: 100%;
-    left: 10%;
+    left: 20%;
 }
 
-textarea {
+input {
     width: 50%;
     font-size: 1.2em;
 }
