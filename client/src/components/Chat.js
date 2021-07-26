@@ -37,8 +37,6 @@ export default function Chat(props) {
 
         });
 
-        console.log({name, room})
-
         return () => {
         }
     }, [ENDPOINT, name, room])

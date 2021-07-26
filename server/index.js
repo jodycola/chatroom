@@ -8,25 +8,11 @@ const io = require("socket.io")(server, {
 const PORT = 4000;
 const NEW_CHAT_MESSAGE_EVENT = "newChatMessage";
 
-const { addUser, removeUser } = require('./users')
-
 io.on("connection", (socket) => {
-  
+
   // Join a conversation
-  socket.on('join', ({ name, room }, callback) => {
-      const { error, user } = addUser({ id: socket.id, name, room });
-
-      if(error) return callback(error);
-
-      socket.emit('message', {  user: 'admin', text: `${user.name} welcome to ${user.room}!`})
-      socket.broadcast.to(user.room).emit('message'), { user: 'admin', text: `${user.name} has joined.`}
-
-      socket.join(user.room);
-
-      io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.room) })
-
-      callback();
-  });
+  const { room } = socket.handshake.query;
+  socket.join(room);
 
   // Listen for new messages
   socket.on(NEW_CHAT_MESSAGE_EVENT, (data) => {
