@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import Input from './Input';
 import Message from './Message';
-import useMessage from '../useMessage/useMessage';
+import useMessage from '../hooks/useMessage';
 import styled from 'styled-components';
 
 let socket;
@@ -12,7 +12,6 @@ export default function Chat(props) {
     const [room, setRoom] = useState("");
 
     const ENDPOINT = 'http://localhost:4000/'
-
 
     const [message, setMessage] = useState("");
     const { messages, sendMessage } = useMessage(room);

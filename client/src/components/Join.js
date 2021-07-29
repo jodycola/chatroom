@@ -1,10 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 export default function Join() {
     const [name, setName] = useState("");
     const [room, setRoom] = useState("");
+    const [roomArray, setRoomArray] = useState([]);
+
+    useEffect(() => {
+    fetch('http://localhost:3000/rooms')
+        .then(res => res.json())
+        .then(data => setRoomArray(data))
+    }, []);
+    
+    const listRooms = roomArray.map((room) => {
+        return <option key={room.id} value={room.name}>{room.name}</option>
+    });
 
     return (
         <JoinStyled>
@@ -20,13 +31,12 @@ export default function Join() {
                     onChange={(e) => setName(e.target.value)}
                 />
 
-                <input 
-                    placeholder="Room" 
-                    className="input" 
-                    type="text"
-                    value={room}
+                <select 
+                    className="select"
                     onChange={(e) => setRoom(e.target.value)}
-                />
+                >
+                {listRooms}
+                </select>
 
                 <Link onClick={ e => (!name || !room) ? e.preventDefault() : null } to={`/chat?name=${name}&room=${room}`}>
                     <button className="button mt-20" type="submit">SIGN IN</button>
@@ -64,6 +74,12 @@ const JoinStyled = styled.div`
     margin-top: 5px;
     padding: 15px 15px;
     width: 100%;
+}
+
+.select {
+    margin-top: 5px;
+    width: 100%;
+    padding: 15px 15px;
 }
 
 h1 {
