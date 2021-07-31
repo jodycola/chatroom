@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export default function Message({ message, messages }) {
+export default function Message({ currentUser, message, messages }) {
     const name = (new URLSearchParams(window.location.search)).get('name');
 
     return (
@@ -13,15 +13,9 @@ export default function Message({ message, messages }) {
                         {message.body}
                     </div>
                 ))}
-                {name ? 
                 <div className="user">
-                    {name}
+                    {currentUser.name}
                 </div>
-                :
-                <div className="user">
-                    user
-                </div>
-                }
             </div>
         </div>
         </MessageStyle>

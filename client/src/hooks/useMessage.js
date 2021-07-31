@@ -4,12 +4,12 @@ import socketIOClient from "socket.io-client";
 const NEW_CHAT_MESSAGE_EVENT = "newChatMessage"; // Name of the event
 const SOCKET_SERVER_URL = "http://localhost:4000";
 
-const useMessage = (room) => {
+const useMessage = (currentUser, room) => {
   const [messages, setMessages] = useState([]); // Sent and received messages
   const socketRef = useRef();
 
   useEffect(() => {
-    
+
     // Creates a WebSocket connection
     socketRef.current = socketIOClient(SOCKET_SERVER_URL, {
       query: { room },
@@ -19,7 +19,7 @@ const useMessage = (room) => {
     socketRef.current.on(NEW_CHAT_MESSAGE_EVENT, (message) => {
       const incomingMessage = {
         ...message,
-        currentUser: message.senderId === socketRef.current.id,
+        sender: currentUser.name
       };
       setMessages((messages) => [...messages, incomingMessage]);
     });
@@ -29,14 +29,14 @@ const useMessage = (room) => {
     return () => {
       socketRef.current.disconnect();
     };
-  }, [room]);
+  }, [currentUser, room]);
 
   // Sends a message to the server that
   // forwards it to all users in the same room
   const sendMessage = (messageBody) => {
     socketRef.current.emit(NEW_CHAT_MESSAGE_EVENT, {
       body: messageBody,
-      senderId: socketRef.current.id,
+      sender: currentUser.name
     });
   };
 

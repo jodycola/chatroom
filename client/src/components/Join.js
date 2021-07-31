@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
-export default function Join() {
-    const [name, setName] = useState("");
-    const [room, setRoom] = useState("");
-    const [roomArray, setRoomArray] = useState([]);
+export default function Join({ currentUser, setCurrentUser }) {
 
+    // States
+    const [login, setLogin] = useState({ name: "", password: "", room: "General" })
+    const [signup, setSignup] = useState({ name: "", password: "", verify: "" })
+    const [roomArray, setRoomArray] = useState([]);
+    const [errors, setErrors] = useState([]);
+    const [front, setFront] = useState(false);
+
+    // Router hooks
+    const history = useHistory();
+
+    // Fetches a list of rooms
+    // Returns dropdown select options
     useEffect(() => {
     fetch('http://localhost:3000/rooms')
         .then(res => res.json())
@@ -15,35 +24,199 @@ export default function Join() {
     
     const listRooms = roomArray.map((room) => {
         return <option key={room.id} value={room.name}>{room.name}</option>
-    });
+    }, []);
+
+
+    // Transition handler
+    const flip = (e) => {
+        setFront(!front);
+        setLogin({ name: "", password: "", room: "General" });
+        setSignup({ name: "", password: "", verify: "" });
+        setErrors([]);
+    }
+
+    // Login handler
+    const handleLogin = (e) => {
+        e.preventDefault();
+        fetch('http://localhost:3000/login', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(login),
+        })
+        .then(res => {
+            if (res.ok) {
+                return res.json();
+            } else {
+                return res.json().then((data) => {
+                    throw data;
+                })
+            }
+          })
+        .then(data => { 
+            setCurrentUser(data.user);
+            localStorage.setItem("token", data.token);
+            history.push(`/chat?&room=${login.room}`);
+            setLogin({
+                name: "",
+                password: "",
+                room: "General"
+            })
+        })
+        .catch(data => {
+            setErrors(data.errors);
+        })
+    };
+
+    // Signup handler
+    const handleSignup = (e) => {
+        e.preventDefault();
+        if ( signup.password === signup.verify ) {
+            fetch('http://localhost:3000/signup', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(signup),
+            })
+            .then(res => {
+                if (res.ok) {
+                    return res.json()
+                } else {
+                    return res.json().then((data) => {
+                        throw data;
+                    });
+                }
+            })
+            setSignup({ name: "", password: "", verify: "" });
+            setFront(!front);
+        }
+        else
+            setErrors(["The passwords you entered did not match"])
+    };
 
     return (
         <JoinStyled>
-        <div className="outer">
-            <div className="inner">
-                <h1> Let's Chat </h1>
+            <div className={`card ${front ? "is-flipped" : ""}`}>
+            <div className="card__face card__face--front">
+                <div className="inner">
+                    <h1> Let's Chat </h1>
+                    <form onSubmit={handleLogin}>
+                    <input 
+                        placeholder="Name" 
+                        className="input"
+                        name="name"
+                        type="text"
+                        value={login.name}
+                        onChange={(e) => setLogin({
+                            ...login, [e.target.name]: e.target.value})}
+                    />
 
-                <input 
-                    placeholder="Name" 
-                    className="input" 
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                />
+                    <input 
+                        placeholder="Password" 
+                        className="input"
+                        name="password"
+                        type="password"
+                        value={login.password}
+                        onChange={(e) => setLogin({
+                            ...login, [e.target.name]: e.target.value})}
+                    />
 
-                <select 
-                    className="select"
-                    onChange={(e) => setRoom(e.target.value)}
-                >
-                {listRooms}
-                </select>
+                    <select
+                        className="select"
+                        name="room"
+                        value={login.room}
+                        onChange={(e) => setLogin({
+                            ...login, [e.target.name]: e.target.value})}
+                    >
+                    {listRooms}
+                    </select>
 
-                <Link onClick={ e => (!name || !room) ? e.preventDefault() : null } to={`/chat?name=${name}&room=${room}`}>
-                    <button className="button mt-20" type="submit">SIGN IN</button>
-                </Link>
+                    {errors.map((error) => (
+                    <p key={error} style={{ color: "red" }}>
+                        {error}
+                    </p>))}
 
+                    <button 
+                        className="button mt-20" 
+                        type="submit"
+                    >
+                    LOG IN
+                    </button>
+                    </form>
+
+                    <button
+                        onClick={(e) => flip(e)}
+                        className="button mt-20"
+                        style={{background: "#16D400"}}
+                        type="submit"
+                    >
+                    SIGN UP
+                    </button>
+                </div>
             </div>
-        </div>
+
+            <div className="card__face card__face--back">
+                <div className="inner">
+                    <h1> Sign up here </h1>
+                    <form onSubmit={handleSignup}>
+                    <input 
+                        placeholder="Name" 
+                        className="input"
+                        name="name"
+                        type="text"
+                        value={signup.name}
+                        onChange={(e) => setSignup({
+                            ...signup, [e.target.name]: e.target.value})}
+                    />
+
+                    <input 
+                        placeholder="Password" 
+                        className="input"
+                        name="password"
+                        type="password"
+                        value={signup.password}
+                        onChange={(e) => setSignup({
+                            ...signup, [e.target.name]: e.target.value})}
+                    />
+
+                    <input 
+                        placeholder="Verify Password" 
+                        className="input"
+                        name="verify"
+                        type="password"
+                        value={signup.verify}
+                        onChange={(e) => setSignup({
+                            ...signup, [e.target.name]: e.target.value})}
+                    />
+
+                    {errors.map((error) => (
+                    <p key={error} style={{ color: "red" }}>
+                        {error}
+                    </p>))}
+
+                    <button 
+                        className="button mt-20" 
+                        type="submit"
+                    >
+                    SIGN UP
+                    </button>
+                    </form>
+
+                    <button
+                        onClick={(e) => flip(e)}
+                        className="button mt-20"
+                        style={{background: "#F97C00"}}
+                        type="submit"
+                    >
+                    LOG IN
+                    </button>
+                </div>
+            </div>
+            </div>
         </JoinStyled>
     )
 }
@@ -54,20 +227,32 @@ const JoinStyled = styled.div`
     box-sizing: border-box;
 }
 
-.outer {
+.card {
+  transition: transform 1s;
+  transform-style: preserve-3d;
+  cursor: pointer;
+}
+
+.card.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.card__face {
     position: absolute;
     left: 40%;
+    width: 40vh;
+    height: 100vh;
     display: flex;
     justifiy-content: center;
     text-align: center;
-    height: 100vh;
-    width: 150vh;
     align-items: center;
     background-color: #1A1A1D;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
-.inner {
-    width: 25%;
+.card__face--back {
+  transform: rotateY(180deg);
 }
 
 .input {

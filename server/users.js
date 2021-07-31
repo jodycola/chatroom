@@ -1,3 +1,4 @@
+// All of this can be used in Rails
 const users = [];
 
 const addUser = ({ id, name, room }) => {

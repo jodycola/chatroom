@@ -11,8 +11,9 @@ const NEW_CHAT_MESSAGE_EVENT = "newChatMessage";
 io.on("connection", (socket) => {
 
   // Join a conversation
-  const { room } = socket.handshake.query;
-  socket.join(room);
+  // Use rails for this logic
+  const { room, currentUser } = socket.handshake.query;
+  socket.join({ room, currentUser });
 
   // Listen for new messages
   socket.on(NEW_CHAT_MESSAGE_EVENT, (data) => {
@@ -20,6 +21,7 @@ io.on("connection", (socket) => {
   });
 
   // Leave the room if the user closes the socket
+  // Use rails for this logic
   socket.on("disconnect", () => {
     socket.leave(room);
   });
