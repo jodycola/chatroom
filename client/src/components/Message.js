@@ -1,20 +1,24 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export default function Message({ currentUser, message, messages }) {
-    const name = (new URLSearchParams(window.location.search)).get('name');
+export default function Message({ message, messageList }) {
+    // const name = (new URLSearchParams(window.location.search)).get('name');
+
+    const displayMessage = messageList.map(message => {
+        return <p> {message} </p>
+    })
 
     return (
         <MessageStyle>
         <div className="container">
             <div className="box">
-                {messages.map((message, i) => (
+                {messageList.map((message, i) => (
                     <div key={i} className={`text ${message.currentUser ? "my-message" : "received-message"}`}>
-                        {message.body}
+                        {message}
                     </div>
                 ))}
                 <div className="user">
-                    {currentUser.name}
+                    {displayMessage}
                 </div>
             </div>
         </div>

@@ -20,14 +20,14 @@ export default function Join({ currentUser, setCurrentUser }) {
     fetch('http://localhost:3000/rooms')
         .then(res => res.json())
         .then(data => setRoomArray(data))
-    }, []);
+    }, [setRoomArray]);
     
     const listRooms = roomArray.map((room) => {
         return <option key={room.id} value={room.name}>{room.name}</option>
     }, []);
 
 
-    // Transition handler
+    // Transition handler for CSS animation
     const flip = (e) => {
         setFront(!front);
         setLogin({ name: "", password: "", room: "General" });
@@ -35,7 +35,7 @@ export default function Join({ currentUser, setCurrentUser }) {
         setErrors([]);
     }
 
-    // Login handler
+    // Login handler put into custom hooks
     const handleLogin = (e) => {
         e.preventDefault();
         fetch('http://localhost:3000/login', {
@@ -73,6 +73,7 @@ export default function Join({ currentUser, setCurrentUser }) {
     // Signup handler
     const handleSignup = (e) => {
         e.preventDefault();
+        // Move to backend
         if ( signup.password === signup.verify ) {
             fetch('http://localhost:3000/signup', {
                 method: 'POST',

@@ -2,61 +2,40 @@ import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import Input from './Input';
 import Message from './Message';
-import useMessage from '../hooks/useMessage';
 import styled from 'styled-components';
-
-let socket;
 
 export default function Chat({ currentUser }) {
     const [room, setRoom] = useState("");
+    const [name, setName] = useState("");
 
-    const ENDPOINT = 'http://localhost:4000/'
+    const socket = io('http://localhost:4000/')
 
     const [message, setMessage] = useState("");
-    const { messages, sendMessage } = useMessage(currentUser, room);
-
-    console.log(messages);
-
-    const handleSendMessage = (e) => {
-        e.preventDefault();
-
-        // useMessage hook
-        sendMessage(message, currentUser);
-        setMessage('');
-
-        // Rails api
-        fetch(`http://localhost:3000/room`, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(room)
-        })
-        .then(res => res.json())
-        .then(console.log)
-    };
+    const [messageList, setMessageList] = useState([]);
 
     useEffect(() => {
-        const room = (new URLSearchParams(window.location.search)).get('room');
-        
-        setRoom(room);
+      socket.on('message', message => {
+      setMessageList([...messageList, message])
+      })
+    })
 
-        socket = io(ENDPOINT);
 
-        socket.emit('join', { room, currentUser }, ( ) => {
-
-        });
-
-        return () => {
-        }
-    }, [ENDPOINT, currentUser, room])
+    const handleSendMessage = (e) => {
+      e.preventDefault();
+      try {
+        setName(Object.values(currentUser)[1]);
+        socket.emit('message',  [ name, message ] ) 
+      } catch (error) {
+        console.log(error);
+      }
+      setMessage('');
+    };
 
     return (
         <ChatStyled>
         <div className="container">
-            <h1 className="room-title">{room} </h1>
-            {messages.length === 0 ? null : <div className="messages"> <Message currentUser={currentUser} message={message} messages={messages}/> </div>}
+            <h1 className="room-title">{room}</h1>
+            {messageList.length === 0 ? null : <div className="messages"> <Message currentUser={currentUser} message={message} messageList={messageList}/> </div>}
             <Input message={message} setMessage={setMessage} handleSendMessage={handleSendMessage} />
         </div>
         </ChatStyled>
