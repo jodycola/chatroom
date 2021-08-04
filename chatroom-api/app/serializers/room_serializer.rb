@@ -1,3 +1,3 @@
 class RoomSerializer < ActiveModel::Serializer
-  attributes :id, :name, :members, :users
+  attributes :id, :title, :messages
 end

@@ -10,6 +10,9 @@ Rails.application.routes.draw do
 
   # Room routes
   get '/rooms', to: 'room#index'
-  get '/room/:name', to: 'room#show'
+  get '/room/:title', to: 'room#show'
+
+  # Message routes
+  post '/add', to: 'message#add'
 
 end

@@ -9,11 +9,13 @@ User.destroy_all
 User.reset_pk_sequence
 Room.destroy_all
 Room.reset_pk_sequence
+Message.destroy_all
+Message.reset_pk_sequence
 
-general = Room.create(name: "General");
-meme = Room.create(name: "Memes");
+general = Room.create(title: "General");
+meme = Room.create(title: "Memes");
 
-kody = User.create(name: 'Kody', password: 'aaa', room_id: general.id);
+kody = User.create(name: 'Kody', password: 'aaa');
 
 
 print "seeded database";

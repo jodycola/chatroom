@@ -23,7 +23,7 @@ export default function Join({ currentUser, setCurrentUser }) {
     }, [setRoomArray]);
     
     const listRooms = roomArray.map((room) => {
-        return <option key={room.id} value={room.name}>{room.name}</option>
+        return <option key={room.id} value={room.title}>{room.title}</option>
     }, []);
 
 
