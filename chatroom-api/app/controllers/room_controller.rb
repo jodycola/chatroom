@@ -6,6 +6,7 @@ class RoomController < ApplicationController
     end
 
     def show
+        byebug
         @room = Room.find_by(title: params[:title])
         render json: @room
     end

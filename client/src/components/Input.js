@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components';
 
-export default function Input({ message, setMessage, handleSendMessage }) {
+export default function Input({ message, setMessage, sendMessage }) {
 
     return (
     <InputStyled>
@@ -12,7 +12,7 @@ export default function Input({ message, setMessage, handleSendMessage }) {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
         />
-        <button className="sendButton" onClick={(e) => handleSendMessage(e)}> Send </button>
+        <button className="sendButton" onClick={(e) => sendMessage(e)}> Send </button>
     </form>
     </InputStyled>
     )

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import io from 'socket.io-client';
 import Input from './Input';
 import Message from './Message';
@@ -14,40 +14,36 @@ export default function Chat({ currentUser }) {
     const room = (new URLSearchParams(window.location.search)).get('room');
 
     // Listens on socket
-    useEffect(() => {
-      socket.on('message', message => {
-      setMessageList([...messageList, message])
-      })
-    })
+    // useEffect(() => {
+    //   socket.on('message', message => {
+    //   setMessageList([...messageList, message])
+    //   })
+    // })
 
 
     // Handlers
-    // Add fetch to update messages in a given chatroom
-    const handleSendMessage = (e) => {
-      e.preventDefault();
-      try {
-        socket.emit('message',  [ name, message ] )
-        fetch(`http://localhost:3000/add`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({message, currentUser, room})
-        })
-        .then(res => res.json())
-        .then(data => setMessageList(data))
-      } catch (error) {
-        console.log(error);
-      }
-      setMessage('');
+    const sendMessage = (e) => {
+      e.preventDefault()
+      console.log(message)
+      setMessage('')
     };
-
+    // const handleSendMessage = async (e) => {
+    //   e.preventDefault();
+    //   try {
+    //     let response = socket.emit('message',  [ name, message ] )
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    //   setMessage('')
+    //   // io.emit('message', message)
+    // };
+  
     return (
         <ChatStyled>
         <h1 className="room-title">{room}</h1>
         <div className="container">
             {messageList.length === 0 ? null :  <Message currentUser={currentUser} message={message} messageList={messageList}/> }
-            <Input message={message} setMessage={setMessage} handleSendMessage={handleSendMessage} />
+            <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
         </div>
         </ChatStyled>
     )

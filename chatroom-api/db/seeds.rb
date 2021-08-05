@@ -16,6 +16,6 @@ general = Room.create(title: "General");
 meme = Room.create(title: "Memes");
 
 kody = User.create(name: 'Kody', password: 'aaa');
-
+guest = User.create(name: 'Guest', password: 'aaa');
 
 print "seeded database";

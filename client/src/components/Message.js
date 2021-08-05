@@ -14,7 +14,7 @@ export default function Message({ message, messageList }) {
             .then(data => setRoomMessages(data.messages))
     }, [room]);
 
-    console.log(roomMessages);
+
     const displayMessage = roomMessages.map((message, index) => {
         return <p key={index} className='text'> {message.body} </p>
     })

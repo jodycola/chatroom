@@ -1,15 +1,34 @@
-# chatroom
+# Fullstack Real-Time Chatroom
+
+### Features
+<ul>
+  <li> Create a user </li>
+  <li> Join different chatrooms </li>
+  <li> Chat with people in real-time </li>
+</ul>
 
 ### Setup
+First you must install the necessary files.  
 
-`CD` into client run `npm start`  
+##### Rails
+`CD` into `chatroom_api`  
+run `bundle install`
+run `rails s`
 
-`CD` into server run `node index.js`  
+##### React
+`CD` into `client`
+run `npm install`
+run `npm start`
+
+##### Node.js
+`CD` into `server`
+run `npm install`
+run `node index.js`
 
 ### Todo List
+RabbitMQ for handling over abundundant socket request at a time
 
 #### User Story
-User can sign in with name
 User can see other users in chatroom  
 User can change color of chat bubbles  
 User can leave chatrooms
