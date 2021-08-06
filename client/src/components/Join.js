@@ -73,7 +73,6 @@ export default function Join({ currentUser, setCurrentUser }) {
     // Signup handler
     const handleSignup = (e) => {
         e.preventDefault();
-        // Move to backend
         if ( signup.password === signup.verify ) {
             fetch('http://localhost:3000/signup', {
                 method: 'POST',

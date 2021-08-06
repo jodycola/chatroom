@@ -1,50 +1,59 @@
-import React, { useState } from 'react';
-import io from 'socket.io-client';
+import React, { useState, useEffect } from 'react';
 import Input from './Input';
 import Message from './Message';
+import ChatWebSocket from './ChatWebSocket';
 import styled from 'styled-components';
 
-export default function Chat({ currentUser }) {
+export default function Chat({ connection, currentUser }) {
 
     // States & variables
-    const [name, setName] = useState("");
     const [message, setMessage] = useState("");
-    const [messageList, setMessageList] = useState([]);
-    const socket = io('http://localhost:4000/')
-    const room = (new URLSearchParams(window.location.search)).get('room');
+    const [messages, setMessages] = useState({content: []});
+    const [currentRoom, setCurrentRoom] = useState(null);
+    const roomName = (new URLSearchParams(window.location.search)).get('room');
 
-    // Listens on socket
-    // useEffect(() => {
-    //   socket.on('message', message => {
-    //   setMessageList([...messageList, message])
-    //   })
-    // })
+    // Update the currentRoom state
+    useEffect(() => {
+      fetch(`http://localhost:3000/room/${roomName}`)
+            .then(res => res.json())
+            .then(data => setCurrentRoom(data))
+    }, [setCurrentRoom])
 
-
-    // Handlers
+    // Send Message handler
     const sendMessage = (e) => {
       e.preventDefault()
-      console.log(message)
+      fetch(`http://localhost:3000/add`, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify({ message, currentUser, currentRoom })
+      })
+      .then(res => res.json())
+      .then(data => updateMessages(data))
+      // .then(data =>  setMessages((messages) => [...messages, data]))
       setMessage('')
     };
-    // const handleSendMessage = async (e) => {
-    //   e.preventDefault();
-    //   try {
-    //     let response = socket.emit('message',  [ name, message ] )
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    //   setMessage('')
-    //   // io.emit('message', message)
-    // };
+
+    // Message list updater
+    const updateMessages = (message) => {
+      setMessages(prevState => [...prevState, {content: message}]);
+    }
   
     return (
         <ChatStyled>
-        <h1 className="room-title">{room}</h1>
+        <h1 className="room-title">{roomName}</h1>
         <div className="container">
-            {messageList.length === 0 ? null :  <Message currentUser={currentUser} message={message} messageList={messageList}/> }
+            <Message currentUser={currentUser} message={message} messages={messages}/>
             <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
         </div>
+        <ChatWebSocket 
+          connection={connection}
+          roomName={roomName}
+          currentRoom={currentRoom}
+          setCurrentRoom={setCurrentRoom}
+          updateMessages={updateMessages}
+        />
         </ChatStyled>
     )
 }

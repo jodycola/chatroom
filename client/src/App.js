@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Join from './components/Join';
 import Chat from './components/Chat';
 
-export default function App() {
+export default function App({ connection }) {
 
   // States
   const [currentUser, setCurrentUser] = useState(null);
@@ -39,6 +39,7 @@ export default function App() {
         <Route exact path="/chat">
           <Chat
             currentUser={currentUser}
+            connection={connection}
           />
         </Route>
     </Router>

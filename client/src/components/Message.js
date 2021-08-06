@@ -1,35 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-export default function Message({ message, messageList }) {
+export default function Message({ message, messages }) {
     
     // State and variables
-    const [roomMessages, setRoomMessages] = useState([])
     const room = (new URLSearchParams(window.location.search)).get('room');
 
-    // useEffect to grab Chatroom messages
-    useEffect(() => {
-        fetch(`http://localhost:3000/room/${room}`)
-            .then(res => res.json())
-            .then(data => setRoomMessages(data.messages))
-    }, [room]);
-
-
-    const displayMessage = roomMessages.map((message, index) => {
-        return <p key={index} className='text'> {message.body} </p>
-    })
-
-
-    // Display messages as mapped product in JSX
-    // const displayMessage = messageList.map((message, index) => {
-    //     return <p key={index} className={`text ${message.currentUser ? "my-message" : "received-message"}`}> {message} </p>
-    // })
+    // Display JSX
+    let display
 
     return (
         <MessageStyle>
         <div className="container">
             <div className="box">
-                {displayMessage}
+                {display}
             </div>
         </div>
         </MessageStyle>
