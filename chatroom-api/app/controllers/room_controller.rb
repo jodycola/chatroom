@@ -10,10 +10,5 @@ class RoomController < ApplicationController
         render json: @room
     end
 
-    def get_message
-        @room = Room.find_by(title: params[:title])
-        byebug
-        render json: @room
-    end
     
 end

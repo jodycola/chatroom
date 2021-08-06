@@ -11,9 +11,9 @@ Rails.application.routes.draw do
   # Room routes
   get '/rooms', to: 'room#index'
   get '/room/:title', to: 'room#show'
-  get '/room/:title/message', to: 'room#get_message'
 
   # Message routes
+  get '/messages', to: 'message#index'
   post '/add', to: 'message#add'
 
   # Action Cable routes

@@ -1,5 +1,10 @@
 class MessageController < ApplicationController
 
+    def index
+        @messages = Message.all
+        render json: @messages
+    end
+
     def add
         @message = Message.create(
             body: params[:message],
