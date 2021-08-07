@@ -14,6 +14,7 @@ Rails.application.routes.draw do
 
   # Message routes
   get '/messages', to: 'message#index'
+  get '/messages/:title', to: 'message#show'
   post '/add', to: 'message#add'
 
   # Action Cable routes

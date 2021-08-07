@@ -15,7 +15,7 @@ class MessageController < ApplicationController
             RoomChannel.broadcast_to(@message.room, {
                 room: @message.room,
                 user: @message.user,
-                message: @message.body
+                message: @message.body,
             })
         end
         render json: @message

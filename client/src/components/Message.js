@@ -11,10 +11,11 @@ export default function Message({ message, messages, currentUser }) {
     if (messages.length > 0) {
         displayMessages = messages.map((message, index) => {
             return (
-            <div className={`message ${message.messages.user.id === currentUser.id ? 'sent' : 'received'}`}>
+            <div key={index} className={`message ${message.messages.user.id === currentUser.id ? 'sent' : 'received'}`}>
                 <div className='text'> {message.messages.message} </div>
 
                 <div className='author'> {message.messages.user.name} </div>
+
             </div>
             )
         })

@@ -22,11 +22,6 @@ export default function App({ connection }) {
     }
   }, [])
 
-  // // Logs a user out and removes local stroage token
-  // const logout = () => {
-  //   localStorage.removeItem("token")
-  //   setCurrentUser(null)
-  // }
 
   return (
     <Router>
@@ -39,6 +34,7 @@ export default function App({ connection }) {
         <Route exact path="/chat">
           <Chat
             currentUser={currentUser}
+            setCurrentUser={setCurrentUser}
             connection={connection}
           />
         </Route>

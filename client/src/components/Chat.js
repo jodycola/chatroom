@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react';
+import NavBar from './NavBar';
 import Input from './Input';
 import Message from './Message';
 import ChatWebSocket from './ChatWebSocket';
 import styled from 'styled-components';
 
-export default function Chat({ connection, currentUser }) {
+export default function Chat({ connection, currentUser, setCurrentUser }) {
 
     // States & variables
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState({ messages: [] });
     const [currentRoom, setCurrentRoom] = useState(null);
-    const roomName = (new URLSearchParams(window.location.search)).get('room');
+    const room = (new URLSearchParams(window.location.search)).get('room');
 
     // Update the currentRoom state
     useEffect(() => {
-      fetch(`http://localhost:3000/room/${roomName}`)
+      fetch(`http://localhost:3000/room/${room}`)
             .then(res => res.json())
             .then(data => setCurrentRoom(data))
     }, [setCurrentRoom])
@@ -30,7 +31,6 @@ export default function Chat({ connection, currentUser }) {
         body: JSON.stringify({ message, currentUser, currentRoom })
       })
       .then(res => res.json())
-      // .then(data => updateMessages(data))
       setMessage('')
     };
 
@@ -41,16 +41,14 @@ export default function Chat({ connection, currentUser }) {
   
     return (
         <ChatStyled>
-        <h1 className="room-title">{roomName}</h1>
-        <div className="container">
-            <Message currentUser={currentUser} message={message} messages={messages}/>
+        <NavBar currentUser={currentUser} setCurrentUser={setCurrentUser} />
+
+        <div className="chatroom">
+            <Message currentUser={currentUser} message={message} messages={messages} />
             <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
         </div>
-        <ChatWebSocket 
-          connection={connection}
-          roomName={roomName}
-          updateMessages={updateMessages}
-        />
+        
+        <ChatWebSocket connection={connection} room={room} updateMessages={updateMessages} />
         </ChatStyled>
     )
 }
@@ -69,15 +67,9 @@ export default function Chat({ connection, currentUser }) {
 //   }
 // }
 const ChatStyled = styled.div`
-.room-title {
-  text-transform: capitalize;
-  font-size: 36px;
-  color: #FFF;
-  border-bottom: 2px #FFF solid;
-}
-
-.container {
+.chatroom {
   position: relative;
+  top: 80px;
   margin: auto;
   height: 525px;
   width: 65%;
