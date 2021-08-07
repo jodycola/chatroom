@@ -1,53 +1,76 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
-export default function Message({ message, messages }) {
+export default function Message({ message, messages, currentUser }) {
+
     
     // State and variables
-    const room = (new URLSearchParams(window.location.search)).get('room');
+    let displayMessages
 
     // Display JSX
-    let display
+    if (messages.length > 0) {
+        displayMessages = messages.map((message, index) => {
+            return (
+            <div className={`message ${message.messages.user.id === currentUser.id ? 'sent' : 'received'}`}>
+                <div className='text'> {message.messages.message} </div>
+
+                <div className='author'> {message.messages.user.name} </div>
+            </div>
+            )
+        })
+    }
+
 
     return (
         <MessageStyle>
         <div className="container">
-            <div className="box">
-                {display}
-            </div>
+            {displayMessages}
         </div>
         </MessageStyle>
     )
 }
 
 // CSS
-
 const MessageStyle = styled.div`
 .container {
     display: flex;
-    width: 20%;
+    flex-flow: column;
+    overflow-y: scroll;
 }
 
-.box {
-    position: relative;
-    justify-content: flex-end;
-    align-items: center;
+.message {
+    width: fit-content;
+    max-width: 250px;
+    word-wrap: break-word;
 }
 
 .text {
-    display: inline-block;
-    position: relative;
-    flex: auto;
-    overflow: auto;
     color: #FFF;
-    background-image: linear-gradient(#99c2ff, #0066ff);
-    padding: 10px 10px;
-    font-size: 25px;
     border-radius: 10px;
-    width: 100%;
-    letter-spacing: 0;
-    font-size: 1.5em;
-    word-wrap: break-word;
+    font-size: 22px;
+    padding: 4px 8px;
+}
+
+.author {
+    font-size: 12px;
+    color: #777777;
+    margin: auto;
+}
+
+.message.sent {
+    flex-direction: row-reverse;
+    align-self: flex-end;
+    .text {
+        background-image: linear-gradient(#99c2ff, #0066ff);
+    }
+}
+
+.message.received {
+    flex-direction: row;
+    align-self: flex-start;
+    .text {
+        background-image: linear-gradient(#FFA387, #FF3C00);
+    }
 }
 
 `

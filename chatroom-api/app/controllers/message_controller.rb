@@ -12,7 +12,7 @@ class MessageController < ApplicationController
             room_id: params[:currentRoom][:id]
         )
         if @message.save
-            RoomsChannel.broadcast_to(@message.room, {
+            RoomChannel.broadcast_to(@message.room, {
                 room: @message.room,
                 user: @message.user,
                 message: @message.body

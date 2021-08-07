@@ -8,7 +8,7 @@ export default function Chat({ connection, currentUser }) {
 
     // States & variables
     const [message, setMessage] = useState("");
-    const [messages, setMessages] = useState({content: []});
+    const [messages, setMessages] = useState({ messages: [] });
     const [currentRoom, setCurrentRoom] = useState(null);
     const roomName = (new URLSearchParams(window.location.search)).get('room');
 
@@ -30,14 +30,13 @@ export default function Chat({ connection, currentUser }) {
         body: JSON.stringify({ message, currentUser, currentRoom })
       })
       .then(res => res.json())
-      .then(data => updateMessages(data))
-      // .then(data =>  setMessages((messages) => [...messages, data]))
+      // .then(data => updateMessages(data))
       setMessage('')
     };
 
     // Message list updater
-    const updateMessages = (message) => {
-      setMessages(prevState => [...prevState, {content: message}]);
+    const updateMessages = (data) => {
+      setMessages(prevState => [ ...prevState, { messages: data } ]);
     }
   
     return (
@@ -50,8 +49,6 @@ export default function Chat({ connection, currentUser }) {
         <ChatWebSocket 
           connection={connection}
           roomName={roomName}
-          currentRoom={currentRoom}
-          setCurrentRoom={setCurrentRoom}
           updateMessages={updateMessages}
         />
         </ChatStyled>
@@ -82,8 +79,8 @@ const ChatStyled = styled.div`
 .container {
   position: relative;
   margin: auto;
-  height: 500px;
-  width: 70%;
+  height: 525px;
+  width: 65%;
   background-color: white;
 }
 
