@@ -4,7 +4,8 @@ import styled from 'styled-components';
 
 export default function Join({ currentUser, setCurrentUser }) {
 
-    // States
+    // States and variables
+    const API = 'https://limitless-hollows-63161.herokuapp.com/'
     const [login, setLogin] = useState({ name: "", password: "", room: "General" })
     const [signup, setSignup] = useState({ name: "", password: "", verify: "" })
     const [roomArray, setRoomArray] = useState([]);
@@ -17,7 +18,7 @@ export default function Join({ currentUser, setCurrentUser }) {
     // Fetches a list of rooms
     // Returns dropdown select options
     useEffect(() => {
-    fetch('http://localhost:3000/rooms')
+    fetch(`${API}rooms`)
         .then(res => res.json())
         .then(data => setRoomArray(data))
     }, [setRoomArray]);
@@ -38,7 +39,7 @@ export default function Join({ currentUser, setCurrentUser }) {
     // Login handler put into custom hooks
     const handleLogin = (e) => {
         e.preventDefault();
-        fetch('http://localhost:3000/login', {
+        fetch(`${API}login`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -74,7 +75,7 @@ export default function Join({ currentUser, setCurrentUser }) {
     const handleSignup = (e) => {
         e.preventDefault();
         if ( signup.password === signup.verify ) {
-            fetch('http://localhost:3000/signup', {
+            fetch(`${API}signup`, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',

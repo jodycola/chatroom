@@ -6,13 +6,14 @@ import Chat from './components/Chat';
 export default function App({ connection }) {
 
   // States
+  const API = 'https://limitless-hollows-63161.herokuapp.com/'
   const [currentUser, setCurrentUser] = useState(null);
 
   // Sets current user local storage token
   useEffect(() => {
     const token = localStorage.getItem("token")
     if (token) {
-      fetch("http://localhost:3000/auth", {
+      fetch(`${API}auth`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -8,6 +8,7 @@ import styled from 'styled-components';
 export default function Chat({ connection, currentUser, setCurrentUser }) {
 
     // States & variables
+    const API = 'https://limitless-hollows-63161.herokuapp.com/'
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState({ messages: [] });
     const [currentRoom, setCurrentRoom] = useState(null);
@@ -15,7 +16,7 @@ export default function Chat({ connection, currentUser, setCurrentUser }) {
 
     // Update the currentRoom state
     useEffect(() => {
-      fetch(`http://localhost:3000/room/${room}`)
+      fetch(`${API}room/${room}`)
             .then(res => res.json())
             .then(data => setCurrentRoom(data))
     }, [setCurrentRoom])
@@ -23,7 +24,7 @@ export default function Chat({ connection, currentUser, setCurrentUser }) {
     // Send Message handler
     const sendMessage = (e) => {
       e.preventDefault()
-      fetch(`http://localhost:3000/add`, {
+      fetch(`${API}add`, {
         method: 'POST',
         headers: {
           'Content-type': 'application/json',
