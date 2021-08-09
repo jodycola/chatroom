@@ -8,8 +8,8 @@ Rails.application.configure do
 
   # Action cable connection configs
   config.action_cable.mount_path = '/cable'
-  config.action_cable.url = 'wss://localhost:3000/cable'
-  config.action_cable.allowed_request_origins = [ /http:\/\/localhost:*/ ]
+  config.action_cable.url = 'wss://immense-sierra-76225.herokuapp.com/cable'
+  config.action_cable.allowed_request_origins = [ 'https://immense-sierra-76225.herokuapp.com', /http:\/\/immense-sierra-76225.herokuapp.com.*/ ]
 
   # Eager load code on boot. This eager loads most of Rails and
   # your application in memory, allowing both threaded web servers

@@ -12,9 +12,6 @@ export default function ChatWebSocket({ connection, room, updateMessages }) {
             },
             received: function(data) {
                 updateMessages(data)
-            },
-            showing: function(data) {
-                console.log(data)
             }
         })
     }, [connection]);

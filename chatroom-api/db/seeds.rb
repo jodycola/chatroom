@@ -13,9 +13,11 @@ Message.destroy_all
 Message.reset_pk_sequence
 
 general = Room.create(title: "General");
+programming = Room.create(title: "Programming");
+current = Room.create(title: "Current Events");
 meme = Room.create(title: "Memes");
 
-kody = User.create(name: 'Kody', password: 'aaa');
+
 guest = User.create(name: 'Guest', password: 'aaa');
 
 print "seeded database";

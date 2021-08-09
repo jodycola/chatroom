@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 export default function Input({ message, setMessage, sendMessage }) {
 
-
     return (
     <InputStyled>
     <form className="form">

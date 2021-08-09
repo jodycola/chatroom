@@ -4,9 +4,10 @@ import App from './App';
 import actionCable from 'actioncable';
 import './index.css';
 
+// Create a Action Cable connection
 const connection = {}
+connection.cable = actionCable.createConsumer(process.env.REACT_APP_WSS)
 
-connection.cable = actionCable.createConsumer('ws://localhost:3000/cable')
 
 ReactDOM.render(
   <React.StrictMode>
